@@ -100,8 +100,79 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener('click', () => { console.log("Console log!") });
+    // log error
+    errorBtns[1].onclick = function handleBtnClick() {
+      console.error("The variable is undefined. Data couldn't be stored.")
+    };
+    // log counts
+    errorBtns[2].onclick = function handleBtnClick() {
+      console.count('count');
+    };
+    // log warn
+    errorBtns[3].onclick = function () { console.warn('warning'); }
+    // log assertions
+    errorBtns[4].onclick = function handleBtnClick() {
+      const length = 2;
+      const actual = 3;
+      const reason = 'length is expected to be 3';
+      console.assert(length == actual, { length, actual, reason });
+    };
+    // clear
+    errorBtns[5].onclick = function () { console.clear() };
+    // dir
+    errorBtns[6].onclick = function () { console.dir(document.body) };
+    // dirxml
+    errorBtns[7].onclick = function () { console.dirxml(document) };
+    // group start
+    const label = 'Console log group';
+    errorBtns[8].onclick = function handleBtnClick() {
+      console.group(label);
+    };
+    // group end
+    errorBtns[9].onclick = function handleBtnClick() {
+      console.groupEnd(label);
+    };
+    // table
+    errorBtns[10].onclick = function handleBtnClick() {
+      let data = [
+        {
+          name: 'Task 1',
+          hours: 3,
+          status: 'In-progress',
+          due: '11/25'
+        },
+        {
+          name: 'Task 2',
+          hours: 2,
+          status: 'Planned',
+          due: 'tbd'
+        },
+        {
+          name: 'Task 3',
+          hours: 1.5,
+          status: 'Planned'
+        }
+      ]
+      console.table(data);
+    }
+    // start timer
+    errorBtns[11].onclick = function handleBtnClick() {
+      console.time("Timer");
+    };
+    // end timer
+    errorBtns[12].onclick = function handleBtnClick() {
+      console.timeEnd("Timer");
+    };
+    // trace
+    errorBtns[13].onclick = function handleBtnClick() {
+      console.trace();
+    };
+    // global error
+    errorBtns[14].onclick = function handleBtnClick() {
+      console.log("Trigger global error");
+      thisFunctionDoesNotExist();
+    };
   </script>
 </body>
 
