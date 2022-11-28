@@ -87,15 +87,37 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({
+      token: "6ace7bccac664e929d10c880ab197c93"
+      // for more configuration options, see https://docs.trackjs.com
+    });                     
+  </script>
+
+  <script>
+    // collect error message and log, then send to some place
+    window.onerror = function (err) {
+      alert('JavaScript Error: ', err);
+      console.log('JavaScript Error: ', err.name);
+    };
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
-      e.preventDefault();
-      let output = document.querySelector('output');
-      let firstNum = document.querySelector('#first-num').value;
-      let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        e.preventDefault();
+        let output = document.querySelector('output');
+        let firstNum = document.querySelector('#first-num').value;
+        let secondNum = document.querySelector('#second-num').value;
+        let operator = document.querySelector('#operator').value;
+
+        if (!firstNum || !secondNum) throw new FieldError("invalid field");
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        console.log("Finally logged calculator error");
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
@@ -173,6 +195,35 @@
       console.log("Trigger global error");
       thisFunctionDoesNotExist();
     };
+
+    // CUSTOM ERROR - validate null fields
+    class FieldError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "FieldError";
+      }
+    }
+
+    // validate button ids
+    try {
+      console.log("Validating button ids...")
+      for (btn of errorBtns) {
+        if (!btn.id) {
+          throw new FieldError("id field is undefined")
+        }
+      }
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        console.log("Syntax error: " + err.message);
+      } else if (err instanceof FieldError) {
+        console.log("Field validation error: " + err.message);
+      } else {
+        console.log("other error: " + err.message)
+        throw err;
+      }
+    } finally {
+      console.log('finally clause executed')
+    }
   </script>
 </body>
 
